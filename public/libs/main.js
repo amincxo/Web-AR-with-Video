@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // mockWithVideo('../../assets/mock-videos/course-banner1.mp4');
     
     const mindarThree = new window.MINDAR.IMAGE.MindARThree({
-      container: document.body,
-      imageTargetSrc: '../targets.mind',
+        container: document.body,
+        imageTargetSrc: '../targets.mind',
     });
     const {renderer, scene, camera} = mindarThree;
 
@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     video.play();
     video.pause();
     const texture = new THREE.VideoTexture(video);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
 
     const geometry = new THREE.PlaneGeometry(1, 1/1);
     // const material = new THREE.MeshBasicMaterial({map: texture});
@@ -41,10 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
       video.pause();
     }
 
+
+   
     await mindarThree.start();
-    renderer.setAnimationLoop(() => {
-      renderer.render(scene, camera);
-    });
+    function render() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(render);
+    }
+    render();
   }
   start();
 });
